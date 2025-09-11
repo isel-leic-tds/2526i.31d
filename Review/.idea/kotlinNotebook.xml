@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="KotlinNotebookOptionsProvider">
+    <option name="kernelVersion" value="0.15.0-615" />
+    <option name="shouldAddProjectLibrariesToClasspath" value="true" />
+    <option name="shouldLimitTypeHintsByActiveCell" value="true" />
+  </component>
+</project>
