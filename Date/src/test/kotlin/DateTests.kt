@@ -40,7 +40,35 @@ class DateTests {
         assertEquals(30,sut.lastDayOfMonth)
     }
     @Test fun lastDayOfMonthLeapYear() {
-        val sut = Date(2020,0,15)
-        assertEquals(0,sut.lastDayOfMonth)
+        val ex = assertFailsWith<IllegalArgumentException>{
+            Date(2020,0,15)
+        }
+        assertEquals("Invalid month 0",ex.message)
+    }
+    @Test fun `Add days to Date in same month`() {
+        val sut = Date(2025,9,22) + 5
+        assertEquals(27,sut.day)
+        assertEquals(9,sut.month)
+        assertEquals(2025,sut.year)
+    }
+    @Test fun `Add days to Date in same year`() {
+        val sut = 9 + Date(2025,9,22)
+        assertEquals(1,sut.day)
+        assertEquals(10,sut.month)
+        assertEquals(2025,sut.year)
+    }
+    @Test fun `Add days to Date in other year`() {
+        val sut = 1 + Date(2025,12,31)
+        assertEquals(1,sut.day)
+        assertEquals(1,sut.month)
+        assertEquals(2026,sut.year)
+    }
+    @Test fun `compare two dates`() {
+        val sut = Date(2025,9,22)
+        assertEquals(sut,sut) // sut == sut
+        val other = Date(2025,9,22)
+        assertEquals(other,sut)
+        assertTrue(other == sut)
+        // a == b  -> a.equals(b)
     }
 }
