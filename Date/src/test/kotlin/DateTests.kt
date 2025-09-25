@@ -69,6 +69,30 @@ class DateTests {
         val other = Date(2025,9,22)
         assertEquals(other,sut)
         assertTrue(other == sut)
-        // a == b  -> a.equals(b)
+        // a == b  -> a?.equals(b) ?: b===null
+    }
+    // hashCode versus equals
+    @Test fun `equal dates have same hashCode`() {
+        val sut = Date(2025,9,25)
+        val other = Date(2025,9,25)
+        assertEquals(other,sut)
+        assertEquals(other.hashCode(),sut.hashCode())
+    }
+    @Test fun `diferent dates must have distinct hashCode`() {
+        val sut = Date(2025,9,25)
+        val other = Date(2025,10,24)
+        assertNotEquals(other,sut)
+        assertNotEquals(other.hashCode(),sut.hashCode())
+    }
+    @Test fun `Relative comparisons of dates`() {
+        val sut = Date(2025, 9, 25)
+        val other = Date(2025, 10, 24)
+        assertTrue(sut < other)
+        assertTrue(sut > Date(2024,1,1))
+        // a > b -> a.compareTo(b) > 0
+    }
+    @Test fun `Text representation of a date`() {
+        val sut = Date(2025, 9, 25)
+        assertEquals("2025-09-25",sut.toString())
     }
 }

@@ -9,17 +9,21 @@ class Date(
     val year: Int = 2000,
     val month: Int = 1,
     val day: Int = 1,
-) :Any() {
+) {
     init {
-        /*if (year !in GREGORIAN_YEAR..MAX_YEAR)
-            throw IllegalArgumentException("Invalid year $year")*/
         require(year in GREGORIAN_YEAR..MAX_YEAR) { "Invalid year $year" }
         require(month in 1..MONTHS_IN_YEAR) { "Invalid month $month" }
         require(day in 1..lastDayOfMonth) { "Invalid day $day" }
     }
-    //constructor(y: Int, m: Int) : this(y,m,1)
-    override fun equals(other: Any?): Boolean =
+    override fun equals(other: Any?) =
         other is Date && year==other.year && month==other.month && day==other.day
+
+    override fun hashCode() =
+        (year*12 + month)*31 + day
+
+    override fun toString(): String =
+        //this::class.simpleName+"@"+hashCode().toString(16)
+        "$year-"+"%02d-%02d".format(month,day)
 }
 
 val Date.leapYear get() = year.isLeapYear
@@ -50,8 +54,9 @@ fun Date.addDays(days: Int): Date {
     require(days > 0) { "days must be >0" }
     return addDaysInternal(days)
 }
-/*
-tailrec fun fact(n: Int, res: Int=1) : Int {
-    if (n <= 1) return res
-    return fact(n-1, res*n)
-}*/
+
+operator fun Date.compareTo(d: Date): Int = when {
+    year != d.year -> year - d.year
+    month != d.month -> month - d.month
+    else -> day - d.day
+}
