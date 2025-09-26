@@ -1,7 +1,6 @@
 import kotlin.test.*
 
 class DateTests {
-
     @Test
     fun testDateCreation() {
         val date = Date(2025, 9, 25)
