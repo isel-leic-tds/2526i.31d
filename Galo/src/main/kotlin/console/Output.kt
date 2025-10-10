@@ -16,11 +16,19 @@ fun Game.show() {
         println(row.joinToString("|") { " ${it.toChar()} " })
         if (idx!=BOARD_SIZE-1) println(separator)
     }
-    println( when {
-        isWinner(CROSS) -> "winner: ${CROSS.toChar()}"
-        isWinner(BALL)  -> "winner: ${BALL.toChar()}"
-        isDraw()        -> "draw"
-        else            -> "turn: ${turn.toChar()}"
+    println( when(state) {
+        is Win  -> "winner: ${state.winner.toChar()}"
+        is Draw -> "draw"
+        is Run  -> "turn: ${state.turn.toChar()}"
     } )
+}
+
+fun Score.show() {
+    entries
+        .map { (key,value) ->
+            val name = key?.let{ "Player ${it.toChar()}" } ?: "Draw"
+            "$name = $value "
+        }
+        .forEach(::println)
 }
 

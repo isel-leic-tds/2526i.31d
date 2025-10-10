@@ -1,42 +1,61 @@
 package model
 import model.Player.*
 
-const val BOARD_SIZE = 2
+const val BOARD_SIZE = 3
 const val BOARD_CELLS = BOARD_SIZE * BOARD_SIZE
 
 typealias Board = Map<Position, Player>
+typealias Score = Map<Player?,Int>
+
+fun Score() = (Player.entries + null).associateWith { 0 }
+
+fun Score.advance(p: Player?) = plus(p to getValue(p)+1)
 
 data class Game(
     val board: Board = emptyMap(),
     val first: Player = CROSS,
-    val state: GameState = GameRun(first),
+    val state: GameState = Run(first),
+    val score: Score = Score()
 )
 
 sealed class GameState
-class GameRun(val turn: Player): GameState()
-class GameWin(val winner: Player): GameState()
-class GameDraw: GameState()
+class Run(val turn: Player): GameState()
+class Win(val winner: Player): GameState()
+object Draw: GameState()
 
 
-fun Game.new() = Game(first = first.other)
+fun Game.new() = Game(
+    first = first.other,
+    score = if (state is Run) score.advance(state.turn.other)
+            else score
+)
 
 fun Game.play(pos: Position): Game {
-    check (state is GameRun) { "Game already finished" }
+    check (state is Run) { "Game already finished" }
     check(pos !in board) { "position not empty" }
-    val board = board + Pair(pos, state.turn)
+    val newBoard = board + Pair(pos, state.turn)
+    val newState = when {
+        newBoard.isWinnerIn(pos) -> Win(state.turn)
+        newBoard.size == BOARD_CELLS -> Draw
+        else -> Run(state.turn.other)
+    }
     return copy(
-        board = board,
-        state = ...
+        board = newBoard,
+        state = newState,
+        score = when (newState) {
+            is Win -> score.advance(newState.winner)
+            is Draw -> score.advance(null)
+            is Run -> score
+        }
     )
 }
 
-fun Game.isWinner(player: Player): Boolean {
-    val positions = Position.values.filter { board[it]==player }
-    if (positions.size<BOARD_SIZE) return false
-    val counts = List(BOARD_SIZE){ row -> positions.count { it.row==row }} +
-                 List(BOARD_SIZE){ col -> positions.count { it.col==col }} +
-                 positions.count{ it.slash } + positions.count { it.backSlash }
-    return counts.any{ it==BOARD_SIZE }
+fun Board.isWinnerIn(p: Position): Boolean {
+    val player = getValue(p)
+    val places = filterValues { it==player }.keys
+    return places.count{ it.col==p.col } == BOARD_SIZE ||
+            places.count{ it.row==p.row } == BOARD_SIZE ||
+            p.backSlash && places.count{ it.backSlash } == BOARD_SIZE ||
+            p.slash && places.count{ it.slash } == BOARD_SIZE
 }
 
-fun Game.isDraw() = board.size == BOARD_CELLS
