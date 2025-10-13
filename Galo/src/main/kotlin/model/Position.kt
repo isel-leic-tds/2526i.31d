@@ -10,7 +10,7 @@ value class Position private constructor(val index: Int) {
     companion object {
        val values = List(BOARD_CELLS){ Position(it) }
        operator fun invoke(pos: Int): Position {
-           require(pos in 0..<BOARD_CELLS)
+           //require(pos in 0..<BOARD_CELLS)
            return values[pos]
        }
    }

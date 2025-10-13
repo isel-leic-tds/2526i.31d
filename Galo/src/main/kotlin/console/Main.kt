@@ -1,5 +1,6 @@
+package console
+
 import model.*
-import console.*
 
 fun main() {
     var game = Game()
