@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.squareup.okio:okio:3.15.0")
+    implementation("com.squareup.okio:okio:3.16.2")
 }
 
 tasks.test {

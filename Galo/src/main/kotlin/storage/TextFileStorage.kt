@@ -29,16 +29,19 @@ class TextFileStorage<Key,Data>(
     private inline fun <R> withPath(key: Key, fx: Path.() -> R): R =
         (basePath / "$key.txt").fx()
 
-    override fun create(k: Key, data: Data) {
-        TODO("Not yet implemented")
+    override fun create(k: Key, data: Data) = withPath(k) {
+        check(!exists()) { "File $k already exists"}
+        writeText(data)
     }
-    override fun read(k: Key): Data? {
-        TODO("Not yet implemented")
+    override fun read(k: Key): Data? = withPath(k) {
+        if (!exists()) null else readText()
     }
-    override fun update(k: Key, data: Data) {
-        TODO("Not yet implemented")
+    override fun update(k: Key, data: Data) = withPath(k) {
+        check(exists()) { "File $k does not exists" }
+        writeText(data)
     }
-    override fun delete(k: Key) {
-        TODO("Not yet implemented")
+    override fun delete(k: Key) = withPath(k) {
+        check(exists()) { "File $k does not exists" }
+        delete()
     }
 }

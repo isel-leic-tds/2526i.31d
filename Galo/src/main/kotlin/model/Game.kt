@@ -19,8 +19,8 @@ data class Game(
 )
 
 sealed class GameState
-class Run(val turn: Player): GameState()
-class Win(val winner: Player): GameState()
+data class Run(val turn: Player): GameState()
+data class Win(val winner: Player): GameState()
 object Draw: GameState()
 
 
