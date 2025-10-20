@@ -1,3 +1,4 @@
+import console.show
 import model.*
 import kotlin.test.*
 
@@ -16,5 +17,28 @@ class GameSerializerTests {
         val sd = StateSerializer.serialize(Draw)
         assertEquals("Draw:", sd)
         assertEquals(Draw, StateSerializer.deserialize(sd))
+    }
+    // Helper function to play a list of moves
+    private fun playMoves(vararg moves:Int): Game =
+        moves.fold(Game()) { g, pos -> g.play(Position(pos)) }
+
+    @Test fun serializeRunGame() {
+        val game = playMoves(4,0,1)
+        //game.show()
+        val s = GameSerializer.serialize(game)
+        //println(s)
+        assertEquals(game,GameSerializer.deserialize(s))
+    }
+    @Test fun serializeWinGame() {
+        val game = playMoves(4,0,1,3,7)
+        val s = GameSerializer.serialize(game)
+        //println(s)
+        assertEquals(game,GameSerializer.deserialize(s))
+    }
+    @Test fun serializeEmptyGame() {
+        val game = Game()
+        val s = GameSerializer.serialize(game)
+        //println(s)
+        assertEquals(game,GameSerializer.deserialize(s))
     }
 }
