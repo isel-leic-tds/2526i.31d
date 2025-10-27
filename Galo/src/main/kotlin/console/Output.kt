@@ -32,3 +32,12 @@ fun Score.show() {
         .forEach(::println)
 }
 
+fun Clash.show() { // = (this as? ClashRun)?.game?.show()
+    if (this !is ClashRun) return
+    game.show()
+}
+
+fun Clash.showScore() {
+    check(this is ClashRun){ "Clash not started" }
+    game.score.show()
+}

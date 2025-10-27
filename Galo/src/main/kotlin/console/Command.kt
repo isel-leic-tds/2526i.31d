@@ -1,40 +1,33 @@
 package console
 
 import model.*
-import storage.Storage
-
-typealias GameStorage = Storage<String,Game>
 
 class Command(
     val syntaxArgs: String = "",
     val isTerminate: Boolean = false,
-    val execute: (game: Game, args:List<String>) -> Game = { g, _ -> g }
+    val execute: (clash: Clash, args:List<String>) -> Clash = { c, _ -> c }
 )
 
-val Play = Command("<position>"){ game, args ->
+val Play = Command("<position>"){ clash, args ->
     val arg = requireNotNull(args.firstOrNull()) { "Missing position" }
     val pos = requireNotNull(arg.toPositionOrNull()) { "Invalid position $arg"}
-    game.play(pos)
+    clash.play(pos)
 }
 
-fun namedCommand( fx: (Game,String)->Game ) = Command("<name>") { game, args ->
-    val name = requireNotNull(args.firstOrNull()) { "Missing name" }
-    fx(game,name)
+fun storageCommand( fx: (Clash,Name)->Clash ) = Command("<name>") { clash, args ->
+    val arg = requireNotNull(args.firstOrNull()) { "Missing name" }
+    fx(clash,Name(arg))  // TODO: Clash.fx(Name)
 }
 
 
-fun getCommands(storage: GameStorage) = mapOf(
+fun getCommands() = mapOf(
     "EXIT" to Command(isTerminate = true),
-    "NEW" to Command { game, _ -> game.new() },
+    "NEW" to Command { clash, _ -> clash.new() },
     "PLAY" to Play,
-    "SCORE" to Command { game, _ -> game.also { it.score.show() } },
-    "SAVE" to namedCommand { game, name ->
-        storage.create(name,game)
-        game
-    },
-    "LOAD" to namedCommand { _, name ->
-        checkNotNull(storage.read(name)) { "$name not found" }
-    }
+    "SCORE" to Command { clash, _ -> clash.also { it.showScore() } },
+    "START" to storageCommand { clash, name -> clash.start(name) },
+    "JOIN" to storageCommand { clash, name -> clash.join(name) },
+    // TODO: "REFRESH"
 )
 
 /* POO style

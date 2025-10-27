@@ -17,7 +17,7 @@ Player <- MapEntry : value
 MapEntry --> Position : key
 
 class GameState <<sealed>>
-Game --> GameState
+Game --> GameState : state
 GameState <|-- Draw
 GameState <|-- Run
 GameState <|-- Win
@@ -25,5 +25,15 @@ GameState <|-- Win
 class Draw <<(O,orange)>>
 Player <-- Run : turn
 Player <-- Win : winner
+
+Game --> Score : score
+
+Clash --> Game : game
+class Clash {
+  name
+  storage
+}
+Clash --> Player : sidePlayer
+
 
 @enduml

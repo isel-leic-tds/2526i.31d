@@ -5,17 +5,16 @@ import storage.TextFileStorage
 
 fun main() {
     val storage = TextFileStorage<String,Game>("games", GameSerializer)
-    var game = Game()
-    val commands: Map<String, Command> = getCommands(storage)
-    game.show()
+    var clash = Clash(storage)
+    val commands: Map<String, Command> = getCommands()
     while (true) {
         val (name, args) = readCommand()
         val cmd = commands[name]
         if (cmd == null) println("Invalid Command $name")
         else try {
-            game = cmd.execute(game, args)
+            clash = cmd.execute(clash, args)
             if (cmd.isTerminate) break
-            game.show()
+            clash.show()
         } catch (ex: IllegalArgumentException) {
             println(ex.message)
             println("Use: $name ${cmd.syntaxArgs}")

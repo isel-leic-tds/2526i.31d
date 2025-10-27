@@ -7,6 +7,7 @@ const val BOARD_CELLS = BOARD_SIZE * BOARD_SIZE
 typealias Board = Map<Position, Player>
 typealias Score = Map<Player?,Int>
 
+@Suppress("FunctionName")
 fun Score() = (Player.entries + null).associateWith { 0 }
 
 fun Score.advance(p: Player?) = plus(p to getValue(p)+1)
