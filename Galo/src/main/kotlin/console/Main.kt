@@ -13,6 +13,7 @@ fun main() {
         if (cmd == null) println("Invalid Command $name")
         else try {
             //clash = cmd.execute(clash, args)
+            //clash = with(cmd) { clash.execute(args) }
             clash = clash.(cmd.execute)(args)
             if (cmd.isTerminate) break
             clash.show()
