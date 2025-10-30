@@ -3,8 +3,6 @@
 
 hide empty members
 
-class Game {
-}
 enum Player
 
 Game --> Player : first
@@ -28,12 +26,11 @@ Player <-- Win : winner
 
 Game --> Score : score
 
-Clash --> Game : game
-class Clash {
-  name
-  storage
-}
-Clash --> Player : sidePlayer
+ClashRun --> Game : game
+ClashRun --> Player : sidePlayer
+Name <- ClashRun : name
 
-
+Clash <|-- ClashRun
+GameStorage <- Clash : storage
+class GameStorage <<(T)>>
 @enduml

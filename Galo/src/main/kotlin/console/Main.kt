@@ -4,7 +4,7 @@ import model.*
 import storage.TextFileStorage
 
 fun main() {
-    val storage = TextFileStorage<String,Game>("games", GameSerializer)
+    val storage = TextFileStorage<Name,Game>("games", GameSerializer)
     var clash = Clash(storage)
     val commands: Map<String, Command> = getCommands()
     while (true) {
@@ -12,7 +12,8 @@ fun main() {
         val cmd = commands[name]
         if (cmd == null) println("Invalid Command $name")
         else try {
-            clash = cmd.execute(clash, args)
+            //clash = cmd.execute(clash, args)
+            clash = clash.(cmd.execute)(args)
             if (cmd.isTerminate) break
             clash.show()
         } catch (ex: IllegalArgumentException) {
