@@ -15,14 +15,14 @@ import pt.isel.tds.ttt.model.Player
 @Preview
 fun PlayerTest() {
     Column {
-        Player(Player.CROSS, Modifier.size(100.dp)) { }
-        Player(modifier = Modifier.background(Color.Cyan).size(150.dp)) { }
-        Player(Player.BALL) { }
+        Cell(Player.CROSS, Modifier.size(100.dp)) { }
+        Cell(modifier = Modifier.background(Color.Cyan).size(150.dp)) { }
+        Cell(Player.BALL) { }
     }
 }
 
 @Composable
-fun Player(
+fun Cell(
     player: Player? = null,
     modifier: Modifier = Modifier.size(200.dp),
     onClick: ()->Unit,

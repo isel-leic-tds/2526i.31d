@@ -17,20 +17,20 @@ val GRID_SIDE = CELL_SIDE*BOARD_SIZE + LINE_THICKNESS*(BOARD_SIZE-1)
 @Composable
 @Preview
 fun BoardTest() {
-    Board(mapOf(
+    Grid(mapOf(
         Position(0) to Player.CROSS,
         Position(4) to Player.BALL
     )) {}
 }
 
 @Composable
-fun Board(board: Board, onClick: (Position)->Unit) {
+fun Grid(board: Board, onClick: (Position)->Unit) {
     Column(Modifier.height(GRID_SIDE).background(Color.Black), Arrangement.SpaceBetween) {
         repeat(BOARD_SIZE) { row ->
             Row(Modifier.width(GRID_SIDE), Arrangement.SpaceBetween) {
                 repeat(BOARD_SIZE) { col ->
                     val position = Position(row * BOARD_SIZE + col)
-                    Player(
+                    Cell(
                         board[position],
                         Modifier.size(CELL_SIDE).background(Color.White),
                         onClick = { onClick(position) }
@@ -46,6 +46,8 @@ fun Board(board: Board, onClick: (Position)->Unit) {
 fun AppGalo() {
     var game by remember { mutableStateOf(Game()) }
     MaterialTheme {
-        Board(game.board, onClick = { game = game.play(it) })
+        Grid(game.board, onClick = {
+            if (game.state is Run) game = game.play(it)
+        })
     }
 }

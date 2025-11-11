@@ -13,12 +13,14 @@ import pt.isel.tds.ttt.model.*
 @Composable
 @Preview
 fun AppGalo1() {
-    var player by remember { mutableStateOf<Player?>(null) }
+    var player: Player? by remember { mutableStateOf<Player?>(null) }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Player(player, onClick = {} )
+            Cell(player, onClick = {} )
             Button(onClick = {
-                player = player?.other ?: Player.CROSS }) {
+                player = player?.other ?: Player.CROSS
+            } ) {
+                println("text = $player")
                 Text("Change player")
             }
         }
