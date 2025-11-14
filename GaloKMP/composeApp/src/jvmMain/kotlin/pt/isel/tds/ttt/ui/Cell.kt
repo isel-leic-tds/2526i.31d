@@ -13,7 +13,7 @@ import pt.isel.tds.ttt.model.Player
 
 @Composable
 @Preview
-fun PlayerTest() {
+fun CellTest() {
     Column {
         Cell(Player.CROSS, Modifier.size(100.dp)) { }
         Cell(modifier = Modifier.background(Color.Cyan).size(150.dp)) { }
@@ -25,7 +25,7 @@ fun PlayerTest() {
 fun Cell(
     player: Player? = null,
     modifier: Modifier = Modifier.size(200.dp),
-    onClick: ()->Unit,
+    onClick: ()->Unit = {},
 ) {
     if (player==null) Box(modifier.clickable(onClick = onClick))
     else {
