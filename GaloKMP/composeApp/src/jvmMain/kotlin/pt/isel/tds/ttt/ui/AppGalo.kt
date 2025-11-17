@@ -4,27 +4,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.window.*
-import pt.isel.tds.ttt.model.*
 
 @Composable
 fun FrameWindowScope.AppGalo(onExit: ()->Unit) {
-    var game by remember { mutableStateOf(Game()) }
-    var viewScore by remember { mutableStateOf(false) }
+    val vm = remember { AppViewModel() }
     MenuBar {
         Menu("Game") {
-            Item("new game") { game = game.new() }
-            Item("score") { viewScore = true }
+            Item("start clash", onClick = vm::startClash)
+            Item("new game", onClick = vm::newBoard)
+            Item("score", onClick = vm::showScore)
             Item("exit", onClick = onExit)
         }
     }
     MaterialTheme {
         Column {
-            Grid(game.board, onClick = {
-                if (game.state is Run) game = game.play(it)
-            })
-            StatusBar(game.state)
+            Grid(vm.game.board, onClick = vm::play)
+            StatusBar(vm.game.state)
         }
-        if (viewScore) ScoreInfo(game.score){ viewScore = false }
+        if (vm.viewScore) ScoreInfo(vm.game.score, vm::hideScore)
+        if (vm.editMode!=null) EditName(vm.editMode, vm::modeAction)
     }
 }
 
