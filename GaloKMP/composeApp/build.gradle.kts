@@ -20,6 +20,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation("com.squareup.okio:okio:3.16.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

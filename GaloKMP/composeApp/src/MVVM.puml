@@ -1,0 +1,8 @@
+@startuml
+
+'skinparam componentStyle rectangle
+
+[View] .> [ViewModel]
+[ViewModel] -> [Model]
+
+@enduml

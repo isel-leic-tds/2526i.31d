@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 import pt.isel.tds.ttt.model.*
 
 @Composable
-fun ScoreInfo(score: Score, onClose: ()-> Unit) = AlertDialog(
+fun ScoreInfo(score: Score, name: Name, onClose: ()-> Unit) = AlertDialog(
     onDismissRequest = onClose,
-    title = { Text("Score") },
+    title = { Text("Score of $name") },
     modifier = Modifier.fillMaxWidth(0.6f),
     confirmButton = { Button(onClick=onClose){ Text("Close") } },
     text = { Placard(score) },

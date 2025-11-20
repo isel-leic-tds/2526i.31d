@@ -2,22 +2,13 @@ package pt.isel.tds.ttt.ui
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import pt.isel.tds.ttt.model.Draw
-import pt.isel.tds.ttt.model.GameState
-import pt.isel.tds.ttt.model.Player
-import pt.isel.tds.ttt.model.Run
-import pt.isel.tds.ttt.model.Win
+import pt.isel.tds.ttt.model.*
 
 val BAR_HEIGHT = 50.dp
 
@@ -25,23 +16,25 @@ val BAR_HEIGHT = 50.dp
 @Preview
 fun StatusBarTest() {
     val status = Run(Player.CROSS)
-    StatusBar(status)
+    StatusBar(status, Player.BALL)
 }
 
 @Composable
 fun LabeledCell(label: String, player: Player?) = Row {
-    Text(label, style = MaterialTheme.typography.displayMedium)
-    player?.let{ Cell(it) }
+    Text(label, style = MaterialTheme.typography.displaySmall)
+    player?.let{ Cell(it, Modifier.padding(5.dp)) }
 }
 
 @Composable
-fun StatusBar(state: GameState) = Row(
+fun StatusBar(state: GameState, you: Player) = Row(
     modifier = Modifier
         .background(Color.LightGray)
         .height(BAR_HEIGHT).width(GRID_SIDE),
     horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically
 ) {
+    LabeledCell("You:", you)
+    Spacer(Modifier.width(BAR_HEIGHT))
     val (label, player) = when (state) {
         is Run -> "Turn:" to state.turn
         is Win -> "Winner:" to state.winner
