@@ -7,7 +7,7 @@ import galokmp.composeapp.generated.resources.*
 
 fun main() = application(exitProcessOnExit = false) {
     Window(
-        onCloseRequest = ::exitApplication,
+        onCloseRequest = { },
         title = "GaloKMP",
         icon = painterResource(Res.drawable.cross),
         state = WindowState(size = DpSize.Unspecified)

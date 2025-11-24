@@ -14,9 +14,9 @@ fun FrameWindowScope.AppGalo(onExit: ()->Unit) {
             Item("start clash", onClick = vm::startClash)
             Item("join clash", onClick = vm::joinClash)
             Item("refresh", enabled = vm.isRun, onClick = vm::refresh)
-            Item("new game", enabled = vm.isRun, onClick = vm::newBoard)
+            Item("new game", enabled = vm.newIsAvailable, onClick = vm::newBoard)
             Item("score", enabled = vm.isRun, onClick = vm::showScore)
-            Item("exit", onClick = onExit)
+            Item("exit", onClick = { vm.end(); onExit() } )
         }
     }
     MaterialTheme {

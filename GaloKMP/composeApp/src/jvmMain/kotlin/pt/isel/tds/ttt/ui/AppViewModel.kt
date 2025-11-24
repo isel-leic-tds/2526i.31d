@@ -13,6 +13,7 @@ class AppViewModel {
     var clash by mutableStateOf(Clash(storage))
 
     val isRun get() = clash is ClashRun
+    val newIsAvailable get() = (clash as? ClashRun)?.newAvailable() ?: false
     val you get() = (clash as ClashRun).sidePlayer
     val name get() = (clash as ClashRun).name
     val game get() = (clash as ClashRun).game
@@ -53,6 +54,7 @@ class AppViewModel {
             EditMode.JOIN  -> join(name)
         }.also { editMode = null }
     }
+    fun end() { clash.deleteIfIsOwner() }
 
     //----
     var message by mutableStateOf<String?>(null)
