@@ -21,6 +21,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("com.squareup.okio:okio:3.16.2")
+            implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.25.2")
+            implementation("org.mongodb:mongodb-driver-kotlin-sync:5.6.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

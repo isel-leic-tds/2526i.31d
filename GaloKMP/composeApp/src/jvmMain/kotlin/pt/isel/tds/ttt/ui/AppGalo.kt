@@ -8,12 +8,13 @@ import androidx.compose.ui.window.*
 
 @Composable
 fun FrameWindowScope.AppGalo(onExit: ()->Unit) {
-    val vm = remember { AppViewModel() }
+    val scope = rememberCoroutineScope()
+    val vm = remember { AppViewModel(scope) }
     MenuBar {
         Menu("Game") {
             Item("start clash", onClick = vm::startClash)
             Item("join clash", onClick = vm::joinClash)
-            Item("refresh", enabled = vm.isRun, onClick = vm::refresh)
+            //Item("refresh", enabled = vm.isRun, onClick = vm::refresh)
             Item("new game", enabled = vm.newIsAvailable, onClick = vm::newBoard)
             Item("score", enabled = vm.isRun, onClick = vm::showScore)
             Item("exit", onClick = { vm.end(); onExit() } )
@@ -28,6 +29,7 @@ fun FrameWindowScope.AppGalo(onExit: ()->Unit) {
         if (vm.viewScore) ScoreInfo(vm.game.score, vm.name, vm::hideScore)
         vm.editMode?.let{ EditName(it, vm::cancelEdit, vm::doAction) }
         vm.message?.let { MessageDialog(it, vm::clearMessage) }
+        if (vm.isWaiting) WaitingIndicator()
     }
 }
 

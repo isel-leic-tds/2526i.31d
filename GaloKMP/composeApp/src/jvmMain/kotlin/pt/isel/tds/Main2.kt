@@ -16,23 +16,17 @@ import kotlin.concurrent.thread
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         val scope = rememberCoroutineScope()
-        //var clickable by remember { mutableStateOf(true) }
         var job by remember { mutableStateOf<Job?>(null) }
         val clickable = job == null
         Row {
             Button(enabled = clickable, onClick = {
                 println("Clicked")
-                //clickable = false
                 job = scope.launch{
-                //thread {
                     repeat(5) { print('.'); delay(1000) }
-                    //repeat(5) { print('.'); Thread.sleep(1000) }
-                    //clickable = true
                     job = null
                 }
             }) { Text("Click me") }
             Button(enabled = !clickable, onClick = {
-                //clickable = true
                 job?.cancel()
                 job = null
             }) { Text("Enable Click") }
