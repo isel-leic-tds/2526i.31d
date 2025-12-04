@@ -5,7 +5,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import pt.isel.tds.storage.MongoStorage
 import pt.isel.tds.storage.TextFileStorage
+import pt.isel.tds.storage.mongo.MongoDriver
 import pt.isel.tds.ttt.model.*
 import pt.isel.tds.ttt.model.Clash
 import pt.isel.tds.ttt.model.GameRemovedException
@@ -14,8 +16,11 @@ enum class EditMode(val text: String) {
     START("Start"), JOIN("Join")
 }
 
-class AppViewModel(private val scope : CoroutineScope) {
-    private val storage = TextFileStorage<Name,Game>("games", GameSerializer)
+class AppViewModel(private val scope: CoroutineScope) {
+    //private val storage = TextFileStorage<Name,_>("games", GameSerializer)
+    private val driver = MongoDriver("galo")
+    private val storage = MongoStorage<Name,_>("games", driver, GameSerializer)
+
     var clash by mutableStateOf(Clash(storage))
 
     val isRun get() = clash is ClashRun
@@ -73,6 +78,7 @@ class AppViewModel(private val scope : CoroutineScope) {
     fun end() {
         cancelWaiting()
         clash.deleteIfIsOwner()
+        driver.close()
     }
 
     //----
@@ -98,10 +104,11 @@ class AppViewModel(private val scope : CoroutineScope) {
                 } catch (ex: Exception) {
                     if (ex is IllegalArgumentException || ex is IllegalStateException)
                         message = ex.message
+                    else throw ex
                     if (ex is GameRemovedException) {
-                        cancelWaiting()
                         clash = Clash(storage)
-                    } else throw ex
+                        break
+                    }
                 }
             } while (!newIsAvailable)
             job = null
