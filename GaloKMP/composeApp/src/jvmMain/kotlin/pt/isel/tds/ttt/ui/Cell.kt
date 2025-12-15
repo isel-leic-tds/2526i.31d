@@ -3,11 +3,13 @@ package pt.isel.tds.ttt.ui
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import galokmp.composeapp.generated.resources.*
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import pt.isel.tds.ttt.model.Player
 
@@ -25,6 +27,7 @@ fun CellTest() {
 fun Cell(
     player: Player? = null,
     modifier: Modifier = Modifier.size(200.dp),
+    anim: Boolean = false,
     onClick: ()->Unit = {},
 ) {
     if (player==null) Box(modifier.clickable(onClick = onClick))
@@ -33,6 +36,22 @@ fun Cell(
             Player.CROSS -> Res.drawable.cross
             Player.BALL -> Res.drawable.circle
         }
-        Image(painterResource(resource), "player", modifier = modifier)
+        if (!anim)
+            Image(painterResource(resource), "player", modifier = modifier)
+        else {
+            var zoom by remember { mutableStateOf(0.1f) }
+            Image(
+                painterResource(resource), "player",
+                modifier = modifier.graphicsLayer(
+                    scaleX = zoom, scaleY = zoom
+                )
+            )
+            LaunchedEffect(player) {
+                while (zoom < 1f) {
+                    delay(50)
+                    zoom += 0.1f
+                }
+            }
+        }
     }
 }

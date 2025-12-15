@@ -7,16 +7,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.*
 
 @Composable
-fun FrameWindowScope.AppGalo(onExit: ()->Unit) {
+fun FrameWindowScope.AppGalo(onExit: MutableState<() -> Unit>) {
     val scope = rememberCoroutineScope()
-    val vm = remember { AppViewModel(scope) }
+    val vm = remember { AppViewModel(scope).also {
+        val oldOnExit = onExit.value
+        onExit.value = { it.end(); oldOnExit() }
+    } }
+
     MenuBar {
         Menu("Game") {
             Item("start clash", onClick = vm::startClash)
             Item("join clash", onClick = vm::joinClash)
             Item("new game", enabled = vm.newIsAvailable, onClick = vm::newBoard)
             Item("score", enabled = vm.isRun, onClick = vm::showScore)
-            Item("exit", onClick = { vm.end(); onExit() } )
+            Item("exit", onClick = { onExit.value() } )
         }
     }
     MaterialTheme {

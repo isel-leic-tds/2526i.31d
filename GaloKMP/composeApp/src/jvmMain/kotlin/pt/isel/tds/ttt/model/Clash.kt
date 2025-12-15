@@ -69,7 +69,7 @@ suspend fun GameStorage.slowRead(name: Name): Game? {
     //println(Thread.currentThread().name)
     val g =  withContext(Dispatchers.IO) {
         //println(Thread.currentThread().name)
-        Thread.sleep(5000)
+        //Thread.sleep(5000)
         read(name)
     }
     //println(Thread.currentThread().name)

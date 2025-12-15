@@ -17,9 +17,9 @@ enum class EditMode(val text: String) {
 }
 
 class AppViewModel(private val scope: CoroutineScope) {
-    //private val storage = TextFileStorage<Name,_>("games", GameSerializer)
-    private val driver = MongoDriver("galo")
-    private val storage = MongoStorage<Name,_>("games", driver, GameSerializer)
+    private val storage = TextFileStorage<Name,_>("games", GameSerializer)
+    //private val driver = MongoDriver("galo")
+    //private val storage = MongoStorage<Name,_>("games", driver, GameSerializer)
 
     var clash by mutableStateOf(Clash(storage))
 
@@ -78,7 +78,7 @@ class AppViewModel(private val scope: CoroutineScope) {
     fun end() {
         cancelWaiting()
         clash.deleteIfIsOwner()
-        driver.close()
+        //driver.close()
     }
 
     //----

@@ -32,14 +32,15 @@ fun GridTest() {
 
 @Composable
 fun Grid(board: Board, onClick: (Position)->Unit) {
-    Column(Modifier.Companion.height(GRID_SIDE).background(Color.Companion.Black), Arrangement.SpaceBetween) {
+    Column(Modifier.height(GRID_SIDE).background(Color.Black), Arrangement.SpaceBetween) {
         repeat(BOARD_SIZE) { row ->
-            Row(Modifier.Companion.width(GRID_SIDE), Arrangement.SpaceBetween) {
+            Row(Modifier.width(GRID_SIDE), Arrangement.SpaceBetween) {
                 repeat(BOARD_SIZE) { col ->
-                    val position = Position.Companion(row * BOARD_SIZE + col)
+                    val position = Position(row * BOARD_SIZE + col)
                     Cell(
                         board[position],
-                        Modifier.Companion.size(CELL_SIDE).background(Color.Companion.White),
+                        Modifier.size(CELL_SIDE).background(Color.White),
+                        anim = board.entries.lastOrNull()?.key == position,
                         onClick = { onClick(position) }
                     )
                 }
