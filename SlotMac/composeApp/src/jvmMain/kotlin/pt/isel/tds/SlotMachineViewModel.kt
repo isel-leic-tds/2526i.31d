@@ -12,5 +12,11 @@ que não são separadores.
  */
 // TODO: II.2
 class SlotMachineViewModel {
+    var playerName by mutableStateOf("")
+    var slotState by mutableStateOf(SlotState.random())
+        private set
 
+    fun isPlayerNameValid() = playerName.count { it.isLetterOrDigit() } >= 3
+    fun play() { slotState = SlotState.random() }
+    fun isWinner() = slotState.isWinner()
 }
